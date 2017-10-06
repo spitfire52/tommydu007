@@ -457,6 +457,16 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 58867760427440938, guid: 624a6f2cb36d78741b58133844a89429,
+        type: 2}
+      propertyPath: m_Offset.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 58867760427440938, guid: 624a6f2cb36d78741b58133844a89429,
+        type: 2}
+      propertyPath: m_Radius
+      value: 0.4
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 50175346107994298, guid: 624a6f2cb36d78741b58133844a89429, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 624a6f2cb36d78741b58133844a89429, type: 2}

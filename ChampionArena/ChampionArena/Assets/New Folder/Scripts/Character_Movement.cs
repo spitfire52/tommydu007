@@ -13,7 +13,7 @@ public class Character_Movement : MonoBehaviour {
     //character auto attack and skills
     private bool autoAttack =false;
     private bool autoAttackCD = false;
-    private float autoTime =0.7f;
+    private float autoTime =0.5f;
     private float autoTimeCounter;
     //skill1
     private bool skill1 = false;
@@ -22,6 +22,12 @@ public class Character_Movement : MonoBehaviour {
     private float skill1TimeCounter;
     public Transform firePoint;
     public GameObject skill1Projectile;
+    //skill2
+    private bool skill2 = false;
+    private bool skill2CD = false;
+    private float skill2Time = 5.0f;
+    private float skill2TimeCounter;
+    private float skill2DashPower = 1000f;
 
     private Animator anim;
 
@@ -39,7 +45,7 @@ public class Character_Movement : MonoBehaviour {
         PlayerAttack();
         
     }
-    //class that controls character movement
+    //class that controls character movement______________________________________________________
     void PlayerMove()
     {
         MoveX = Input.GetAxis("Horizontal");
@@ -59,7 +65,7 @@ public class Character_Movement : MonoBehaviour {
             {
                 FlipPlayer();
             }
-            //if character is on ground and not using skills or attacking then allow movement
+            //if character is on ground and not using skills then allow movement
             if (isGrounded == true && skill1==false)
             {
                 anim.SetBool("InAir", false);
@@ -70,6 +76,7 @@ public class Character_Movement : MonoBehaviour {
     void Jump() {
         GetComponent<Rigidbody2D>().AddForce(Vector2.up * JumpPower);
         anim.SetBool("InAir", true);
+        
         isGrounded = false;
     }
     void FlipPlayer() {
@@ -80,8 +87,9 @@ public class Character_Movement : MonoBehaviour {
     }
     //class that controls character attacks and skills
     void PlayerAttack() {
-        //auto attack
-        if (Input.GetButtonDown("Fire1") && isGrounded == true && autoAttackCD ==false) {
+        //auto attack (ground)___________________________________________________________________
+        if (Input.GetButtonDown("Fire1") && autoAttackCD == false && isGrounded == true)
+        {
             autoTimeCounter = autoTime;
             autoAttack = true;
             autoAttackCD = true;
@@ -89,6 +97,16 @@ public class Character_Movement : MonoBehaviour {
             myRigidBody.velocity = Vector2.zero;
             anim.SetBool("Auto", true);
         }
+        //auto attack (air)
+        if (Input.GetButtonDown("Fire1") && autoAttackCD == false && isGrounded == false) {
+            autoTimeCounter = autoTime;
+            autoAttack = true;
+            autoAttackCD = true;
+            //can move while auto attacking air
+            
+            anim.SetBool("Auto", true);
+        }
+
         if (autoTimeCounter > 0) {
             autoTimeCounter -= Time.deltaTime;
         }
@@ -97,7 +115,7 @@ public class Character_Movement : MonoBehaviour {
             autoAttackCD = false;
             anim.SetBool("Auto", false);
         }
-        //Skill1
+        //Skill1_______________________________________________________________________________________
         if (Input.GetButtonDown("Fire2") && isGrounded == true && skill1CD == false) {
             skill1TimeCounter = skill1Time;
             skill1 = true;
@@ -110,17 +128,49 @@ public class Character_Movement : MonoBehaviour {
         {
             skill1TimeCounter -= Time.deltaTime;
         }
-        //skill animation and skill itself ends
+        //skill1 animation and skill1 itself ends
         if (skill1TimeCounter < 4.65)
         {
             anim.SetBool("Skill1", false);
             skill1 = false;
         }
-        //skill cd ends
+        //skill1 cd ends
         if (skill1TimeCounter <= 0)
         {
             skill1CD = false;
             
+        }
+        //Skill2____________________________________________________________________________________
+        if (Input.GetButtonDown("Fire3")  && skill2CD == false && isGrounded==false) {
+            skill2TimeCounter = skill2Time;
+            skill2 = true;
+            skill2CD = true;
+            anim.SetBool("Skill2", true);
+            if (FacingRight == false)
+            {
+                GetComponent<Rigidbody2D>().AddForce(Vector2.right * skill2DashPower);
+            }
+            if (FacingRight == true)
+            {
+                GetComponent<Rigidbody2D>().AddForce(Vector2.left * skill2DashPower);
+            }
+        }
+        if (skill2TimeCounter > 0)
+        {
+            skill2TimeCounter -= Time.deltaTime;
+        }
+        //skill2 animation and skill2 itself ends
+        if (skill2TimeCounter < 4.65)
+        {
+            skill2 = false;
+            anim.SetBool("Skill2", false);
+        }
+        //skill2 cd ends
+        if (skill2TimeCounter <= 0)
+        {
+           
+            skill2CD = false;
+
         }
     }
     //detect if character is on ground with collider

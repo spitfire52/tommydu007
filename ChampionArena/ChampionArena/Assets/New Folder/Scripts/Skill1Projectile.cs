@@ -7,9 +7,15 @@ public class Skill1Projectile : MonoBehaviour {
     //projectile speed
     public float speed;
 
+    public Character_Movement player;
+
 	// Use this for initialization
 	void Start () {
-    myRigidBody = GetComponent<Rigidbody2D>();
+    //myRigidBody = GetComponent<Rigidbody2D>();
+        player = FindObjectOfType<Character_Movement>();
+        if (player.transform.localScale.x < 0) {
+            speed = -speed;
+        }
 
     }
 	
@@ -21,6 +27,9 @@ public class Skill1Projectile : MonoBehaviour {
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-      
+        //Destroy(gameObject);             //currently needs fixing since it collides with player and 
+                                           //skill1 projectile disappear, need to chenge so it only disappear 
+                                           //when hitting terrian or enemy.
+            
     }
 }
